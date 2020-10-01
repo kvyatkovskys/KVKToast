@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'KVKToast_Example' do
+  pod 'KVKToast', :path => '../'
+
+  target 'KVKToast_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
