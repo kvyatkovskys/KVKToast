@@ -1,0 +1,16 @@
+PODS:
+  - KVKToast (0.1.0)
+
+DEPENDENCIES:
+  - KVKToast (from `../`)
+
+EXTERNAL SOURCES:
+  KVKToast:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  KVKToast: c3928845df07ee8727fac881f976441d625b9086
+
+PODFILE CHECKSUM: f70da0a98b01cecb1cd8fe6071b885b7cd00a8ed
+
+COCOAPODS: 1.9.3
