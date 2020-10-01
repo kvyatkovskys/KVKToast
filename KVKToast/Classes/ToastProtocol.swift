@@ -23,14 +23,10 @@ extension KVKToastDisplayable where Self: UIViewController {
     }
 }
 
-// MARK: Private Protocol
+// MARK: Privates
 
-protocol ToastProtocol: class {
-    func showToast(title: String, message: String?, image: UIImage?, position: ToastPosition, duration: Double, style: ToastStyle)
-}
-
-extension UIView: ToastProtocol {
-    func showToast(title: String, message: String?, image: UIImage?, position: ToastPosition, duration: Double, style: ToastStyle) {
+extension UIView {
+    fileprivate func showToast(title: String, message: String?, image: UIImage?, position: ToastPosition, duration: Double, style: ToastStyle) {
         print(title, message)
     }
 }
