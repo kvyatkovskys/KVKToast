@@ -31,6 +31,6 @@ protocol ToastProtocol: class {
 
 extension UIView: ToastProtocol {
     func showToast(title: String, message: String?, image: UIImage?, position: ToastPosition, duration: Double, style: ToastStyle) {
-        
+        print(title, message)
     }
 }
