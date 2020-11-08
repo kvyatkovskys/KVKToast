@@ -13,12 +13,9 @@ class ViewController: UIViewController, KVKToastDisplayable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        displayToast("Test Toast!", message: "Dispose of any resources that can be recreated.")
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            self?.displayToast("Test Toast!", message: "Dispose of any resources that can be recreated.")
+        }
     }
 
 }
