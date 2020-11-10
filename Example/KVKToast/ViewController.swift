@@ -14,7 +14,7 @@ class ViewController: UIViewController, KVKToastDisplayable {
     override func viewDidLoad() {
         super.viewDidLoad()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            self?.displayToast("Test Toast!", message: "Dispose of any resources that can be recreated.")
+            self?.displayToast("Test Toast!", message: "Dispose of any resources!")
         }
     }
 

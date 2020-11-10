@@ -27,7 +27,7 @@ extension KVKToastDisplayable where Self: UIViewController {
 
 extension UIView {
     fileprivate func showToast(title: String, message: String?, image: UIImage?, position: ToastPosition, duration: Double, style: ToastStyle) {
-        let heightToast: CGFloat = 50
+        var heightToast: CGFloat = 50
         let defaultTopOffset = UIApplication.shared.statusBarFrame.height + 5
         let defaultBottomOffset: CGFloat = 55
         let topY: CGFloat
@@ -54,13 +54,32 @@ extension UIView {
             testImage = UIImage(systemName: "trash")
         }
         
-        let toast = ToastView(parameters: .init(title: title,
-                                                message: message,
-                                                image: testImage,
-                                                style: style),
-                              frame: CGRect(x: (frame.width * 0.5) - 125, y: topY, width: 250, height: heightToast))
+        var widthToast: CGFloat = 300
+        if let text = message {
+            let messageWidth = text.width(withHeight: heightToast, font: .appFont(size: 17)) + 40
+            if messageWidth > UIScreen.main.bounds.width {
+                widthToast = UIScreen.main.bounds.width - 20
+                let messageHeight = text.height(withWidth: widthToast, font: .appFont(size: 17)) + 40
+                if messageHeight > heightToast {
+                    heightToast = messageHeight + 20
+                }
+            } else if messageWidth > widthToast {
+                widthToast = messageWidth
+            }
+        }
+        
+        let toast = ToastView(parameters: .init(title: title, message: message, image: testImage, style: style),
+                              frame: CGRect(x: (frame.width * 0.5) - (widthToast * 0.5), y: topY, width: widthToast, height: heightToast))
         toast.layer.cornerRadius = 25
         toast.layer.masksToBounds = true
+        toast.transform = CGAffineTransform(translationX: 0, y: -(heightToast + topY))
         addSubview(toast)
+        
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: .curveEaseInOut) {
+            toast.transform = .identity
+        } completion: { (_) in
+            
+        }
+
     }
 }
