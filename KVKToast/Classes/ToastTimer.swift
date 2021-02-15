@@ -12,9 +12,9 @@ private enum AssociatedKeys {
 }
 
 /// Any object can start and stop delayed action for key
-protocol TimerThrottle: class {}
+protocol ToastTimer: class {}
 
-extension TimerThrottle {
+extension ToastTimer {
     
     private var timers: [String: Timer] {
         get { return objc_getAssociatedObject(self, &AssociatedKeys.timer) as? [String: Timer] ?? [:] }
@@ -27,8 +27,6 @@ extension TimerThrottle {
     }
     
     func startTimer(_ key: String = "Timer", interval: TimeInterval = 1, action: @escaping () -> Void) {
-        stopTimer(key)
-        
         timers[key] = Timer.scheduledTimer(withTimeInterval: interval, repeats: false, block: { _ in
             action()
         })

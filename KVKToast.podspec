@@ -1,23 +1,34 @@
-Pod::Spec.new do |s|
-  s.name             = 'KVKToast'
-  s.version          = '0.1.0'
-  s.summary          = 'A short description of KVKToast.'
-  s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
+Pod::Spec.new do |spec|
+  spec.name         = "KVKToast"
+  spec.version      = "0.1.0"
+  spec.summary      = "A short description of KVKToast."
+  spec.description  = <<-DESC
+  TODO: Add long description of the pod here.
+                   DESC
 
-  s.homepage         = 'https://github.com/kvyatkovskys/KVKToast'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
-  s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'kvyatkovskys' => 'sergejkvyatkovskij@gmail.com' }
-  s.source           = { :git => 'https://github.com/kvyatkovskys/KVKToast.git', :tag => s.version.to_s }
-  s.ios.deployment_target = '10.0'
-  s.source_files = 'KVKToast/Classes/**/*'
-  
-  # s.resource_bundles = {
-  #   'KVKToast' => ['KVKToast/Assets/*.png']
-  # }
+  spec.homepage     = "http://EXAMPLE/KVKToast"
+  # spec.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
-  s.frameworks = 'UIKit'
-  s.swift_version = '5.0'
+  spec.license      = { :type => "Apache License, Version 2.0", :file => "FILE_LICENSE" }
+  spec.author             = { "kviatkovskii" => "sergejkvyatkovskij@gmail.com" }
+  spec.ios.deployment_target = "13.0"
+  spec.osx.deployment_target = "10.15"
+  spec.watchos.deployment_target = "5.0"
+  spec.tvos.deployment_target = "11.0"
+
+  spec.source       = { :git => "https://github.com/kvyatkovskys/KVKToast.git", :tag => spec.version.to_s }
+  spec.source_files  = "Sources/KVKToast/**/*.{swift}"
+
+
+  # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  #
+  #  A list of resources included with the Pod. These are copied into the
+  #  target bundle with a build phase script. Anything else will be cleaned.
+  #  You can preserve files from being cleaned, please don't preserve
+  #  non-essential files like tests, examples and documentation.
+  #
+
+  # spec.resource  = "icon.png"
+  # spec.resources = "Resources/*.png"
+
 end
