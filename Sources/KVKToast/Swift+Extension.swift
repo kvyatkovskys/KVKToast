@@ -5,15 +5,20 @@
 //  Created by Sergei Kviatkovskii on 01.10.2020.
 //
 
+#if os(iOS)
+
 import UIKit
 
 extension UIFont {
+    
     static func appFont(size: CGFloat, weight: Weight = .regular) -> UIFont {
         return UIFont.systemFont(ofSize: size, weight: weight)
     }
+    
 }
 
 extension UIView {
+    
     func setRoundCorners(_ corners: UIRectCorner = .allCorners, radius: CGSize) {
         let path = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: radius)
         let mask = CAShapeLayer()
@@ -26,11 +31,18 @@ extension UIView {
         let blurView = UIVisualEffectView(effect: blur)
         blurView.frame = bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        addSubview(blurView)
+        
+        if let idx = subviews.firstIndex(where: { $0 is UIVisualEffectView }) {
+            subviews[idx].removeFromSuperview()
+        }
+        
+        insertSubview(blurView, at: 0)
     }
+
 }
 
 extension String {
+    
     func height(withWidth width: CGFloat, font: UIFont) -> CGFloat {
         let maxSize = CGSize(width: width, height: .greatestFiniteMagnitude)
         let actualSize = self.boundingRect(with: maxSize, options: [.usesLineFragmentOrigin], attributes: [.font: font], context: nil)
@@ -42,9 +54,11 @@ extension String {
         let actualSize = self.boundingRect(with: maxSize, options: [.usesLineFragmentOrigin], attributes: [.font: font], context: nil)
         return actualSize.width
     }
+
 }
 
 extension UIScreen {
+    
     static var isDarkMode: Bool {
         if #available(iOS 12.0, *) {
             return main.traitCollection.userInterfaceStyle == .dark
@@ -52,4 +66,23 @@ extension UIScreen {
             return false
         }
     }
+
 }
+
+extension UIApplication {
+    
+    var activeWindow: UIWindow? {
+        UIApplication.shared.windows.first(where: { $0.isKeyWindow })
+    }
+    
+    var statusBarHeight: CGFloat {
+        if #available(iOS 13.0, *) {
+            return activeWindow?.windowScene?.statusBarManager?.statusBarFrame.height ?? 24
+        } else {
+            return statusBarFrame.height
+        }
+    }
+    
+}
+
+#endif

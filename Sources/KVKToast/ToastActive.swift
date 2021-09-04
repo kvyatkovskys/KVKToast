@@ -5,6 +5,8 @@
 //  Created by Sergei Kviatkovskii on 01.10.2020.
 //
 
+#if os(iOS)
+
 import UIKit
 
 private enum AssociatedKeys {
@@ -16,16 +18,26 @@ protocol ToastActive: AnyObject {}
 
 extension ToastActive {
     
-    private var toasts: [String: UIView] {
-        get { return objc_getAssociatedObject(self, &AssociatedKeys.toast) as? [String: UIView] ?? [:] }
+    private var toasts: [Int: UIView] {
+        get { return objc_getAssociatedObject(self, &AssociatedKeys.toast) as? [Int: UIView] ?? [:] }
         set { objc_setAssociatedObject(self, &AssociatedKeys.toast, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
     
-    func disableToast(_ key: String = "activeToast") {
-        toasts.removeValue(forKey: key)
+    var lastActiveToastKey: Int {
+        toasts.keys.sorted(by: { $0 > $1 }).first ?? 0
     }
     
-    func enableToast(_ key: String = "activeToast", toast: UIView) {
+    @discardableResult
+    func removeToast(_ key: Int) -> UIView? {
+        let toast = toasts.removeValue(forKey: key)
+        print(toasts, "🚨🚨")
+        return toast
+    }
+    
+    func saveToast(_ key: Int, toast: UIView) {
         toasts[key] = toast
+        print(toasts, "🚨")
     }
 }
+
+#endif

@@ -5,6 +5,8 @@
 //  Created by Sergei Kviatkovskii on 01.10.2020.
 //
 
+#if os(iOS)
+
 import UIKit
 
 public struct ToastStyle {
@@ -24,3 +26,5 @@ public struct ToastStyle {
     public var imageSize = CGSize(width: 30, height: 30)
     public var minHeight: CGFloat = 70
 }
+
+#endif

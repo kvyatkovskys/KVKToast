@@ -5,6 +5,8 @@
 //  Created by Sergei Kviatkovskii on 01.10.2020.
 //
 
+#if os(iOS)
+
 import UIKit
 
 final class ToastView: UIView {
@@ -50,9 +52,9 @@ final class ToastView: UIView {
     init(parameters: Parameters, frame: CGRect) {
         self.parameters = parameters
         super.init(frame: frame)
+
+        updateStyle()
         
-        backgroundColor = .systemTeal
-        //setBlur(style: UIScreen.isDarkMode ? .dark : .light)
         if let img = parameters.image {
             imageView.image = img
             imageView.frame = CGRect(x: 10, y: (frame.height * 0.5) - 12.5, width: 25, height: 25)
@@ -76,12 +78,15 @@ final class ToastView: UIView {
         }
         
         titleLabel.text = parameters.title
-        titleLabel.frame = CGRect(x: titleX, y: 0, width: titleWidth, height: titleHeight)
+        titleLabel.frame = CGRect(x: titleX, y: 5, width: titleWidth, height: titleHeight)
         addSubview(titleLabel)
         
         if let message = parameters.message {
             messageLabel.text = message
-            messageLabel.frame = CGRect(x: titleLabel.frame.origin.x, y: titleLabel.frame.height, width: titleLabel.frame.width, height: frame.height - titleLabel.frame.height)
+            messageLabel.frame = CGRect(x: titleLabel.frame.origin.x,
+                                        y: titleLabel.frame.height + titleLabel.frame.origin.y,
+                                        width: titleLabel.frame.width,
+                                        height: frame.height - titleLabel.frame.height - titleLabel.frame.origin.y)
             addSubview(messageLabel)
         }
     }
@@ -91,6 +96,35 @@ final class ToastView: UIView {
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        //setBlur(style: UIScreen.isDarkMode ? .dark : .light)
+        updateStyle()
     }
+    
+    private func updateStyle() {
+        let style: UIBlurEffect.Style
+        let textColor: UIColor
+        let bgColor: UIColor
+        
+        switch UIScreen.isDarkMode {
+        case true:
+            style = .dark
+            textColor = .lightText
+            bgColor = .black
+        case false:
+            style = .light
+            textColor = .black
+            if #available(iOS 13.0, *) {
+                bgColor = .systemGray6
+            } else {
+                bgColor = .lightGray
+            }
+        }
+        
+        titleLabel.textColor = textColor
+        messageLabel.textColor = textColor
+        backgroundColor = bgColor
+        setBlur(style: style)
+    }
+    
 }
+
+#endif
