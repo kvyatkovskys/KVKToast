@@ -9,10 +9,8 @@
 
 import UIKit
 
-@available(iOS 10.0, *)
-public protocol KVKToastDisplayable {}
+public protocol KVKToastDisplayable: AnyObject {}
 
-@available(iOS 10.0, *)
 extension KVKToastDisplayable where Self: UIViewController {
         
     public func displayToast(_ title: String, message: String? = nil, image: UIImage? = nil, position: ToastPosition = .top, type: ToastType = .info, duration: Double = 3.0, style: ToastStyle = ToastStyle()) {
@@ -20,11 +18,19 @@ extension KVKToastDisplayable where Self: UIViewController {
         type.notificationFeedback()
     }
     
+    public func removeAllToasts() {
+        view.removeAllToasts()
+    }
+    
 }
 
 // MARK: Privates
 
-extension UIView: ToastTimer, ToastActive {
+extension UIView: ToastTimer, ToastStore {
+    
+    func removeAllToasts() {
+        stopAllTimers()
+    }
     
     func showToast(title: String, message: String?, image: UIImage?, position: ToastPosition, duration: Double, style: ToastStyle) {
         var heightToast: CGFloat = 50
@@ -101,7 +107,7 @@ extension UIView: ToastTimer, ToastActive {
         } completion: { (_) in
             let key = self.lastActiveToastKey + 1
             self.saveToast(key, toast: toast)
-            self.startTimer("toast-\(key)", interval: duration) { [weak self] in
+            self.startTimer(key, interval: duration) { [weak self] in
                 self?.hideToast(toast: toast, position: position, offset: offset) { [weak self] in
                     let removedToast = self?.removeToast(key)
                     removedToast?.removeFromSuperview()
@@ -110,7 +116,7 @@ extension UIView: ToastTimer, ToastActive {
         }
     }
     
-    func hideToast(toast: UIView, position: ToastPosition, offset: CGFloat, completion: @escaping () -> Void) {
+    func hideToast(toast: UIView, position: ToastPosition, offset: CGFloat, completion: @escaping Action) {
         UIView.animate(withDuration: 1) {
             if position == .center {
                 toast.alpha = 0

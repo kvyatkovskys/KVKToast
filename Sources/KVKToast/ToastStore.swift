@@ -1,5 +1,5 @@
 //
-//  ToastActive.swift
+//  ToastStore.swift
 //  KVKToast
 //
 //  Created by Sergei Kviatkovskii on 01.10.2020.
@@ -14,9 +14,9 @@ private enum AssociatedKeys {
 }
 
 /// Any object can start and stop delayed action for key
-protocol ToastActive: AnyObject {}
+protocol ToastStore: AnyObject {}
 
-extension ToastActive {
+extension ToastStore {
     
     private var toasts: [Int: UIView] {
         get { return objc_getAssociatedObject(self, &AssociatedKeys.toast) as? [Int: UIView] ?? [:] }

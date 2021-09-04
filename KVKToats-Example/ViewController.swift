@@ -8,7 +8,7 @@
 import UIKit
 import KVKToast
 
-class ViewController: UIViewController, KVKToastDisplayable {
+final class ViewController: UIViewController, KVKToastDisplayable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +27,7 @@ class ViewController: UIViewController, KVKToastDisplayable {
                                position: .bottom,
                                duration: 20)
         }
+        
     }
 
 

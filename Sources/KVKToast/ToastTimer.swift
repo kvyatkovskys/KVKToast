@@ -14,28 +14,34 @@ private enum AssociatedKeys {
 }
 
 /// Any object can start and stop delayed action for key
-protocol ToastTimer: AnyObject {}
+protocol ToastTimer: ToastAction {}
 
 extension ToastTimer {
     
-    private var timers: [String: Timer] {
-        get { return objc_getAssociatedObject(self, &AssociatedKeys.timer) as? [String: Timer] ?? [:] }
+    private var timers: [Int: Timer] {
+        get { return objc_getAssociatedObject(self, &AssociatedKeys.timer) as? [Int: Timer] ?? [:] }
         set { objc_setAssociatedObject(self, &AssociatedKeys.timer, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
     
-    func stopTimer(_ key: String = "Timer") {
+    func stopTimer(_ key: Int) {
         timers[key]?.invalidate()
         timers[key] = nil
     }
     
-    func startTimer(_ key: String = "Timer", interval: TimeInterval = 1, action: @escaping () -> Void) {
-        if #available(iOS 10.0, *) {
-            timers[key] = Timer.scheduledTimer(withTimeInterval: interval, repeats: false, block: { _ in
-                action()
-            })
-        } else {
-            // Fallback on earlier versions
+    func startTimer(_ key: Int, interval: TimeInterval = 1, action: @escaping Action) {
+        addAction(key: key, action: action)
+        
+        timers[key] = Timer.scheduledTimer(withTimeInterval: interval, repeats: false, block: { [weak self] _ in
+            self?.completeAction(key: key)
+        })
+    }
+    
+    func stopAllTimers() {
+        timers.forEach {
+            $0.value.invalidate()
         }
+        timers.removeAll()
+        completeAllActions()
     }
     
 }
