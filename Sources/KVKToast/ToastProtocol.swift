@@ -9,35 +9,33 @@
 
 import UIKit
 
-public protocol KVKToastDisplayable: AnyObject {}
+public protocol KVKToastDisplayable {}
 
-@available(iOS 10.0, *)
-extension KVKToastDisplayable where Self: UIViewController {
+public extension KVKToastDisplayable where Self: UIView {
         
-    public func displayToast(_ title: String,
+    func displayToast(_ title: String,
                              message: String? = nil,
                              image: UIImage? = nil,
                              position: ToastPosition = .top,
                              type: ToastType = .info,
                              duration: Double = 3.0)
     {
-        view.showToast(title: title, message: message, image: image, position: position, duration: duration)
+        showToast(title: title, message: message, image: image, position: position, duration: duration)
         type.notificationFeedback()
     }
     
-    public func hideAllToasts() {
-        view.removeAllToasts()
+    func hideAllToasts() {
+        removeAllToasts()
     }
     
-    public func hideToast() {
-        view.removeToast()
+    func hideToast() {
+        removeToast()
     }
     
 }
 
 // MARK: Privates
 
-@available(iOS 10.0, *)
 extension UIView: ToastTimer, ToastStore {
     
     func removeAllToasts() {

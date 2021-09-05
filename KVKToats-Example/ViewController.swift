@@ -8,7 +8,7 @@
 import UIKit
 import KVKToast
 
-final class ViewController: UIViewController, KVKToastDisplayable {
+final class ViewController: UIViewController {
         
     private lazy var displayButton: UIButton = {
         let button = UIButton(type: .system)
@@ -28,7 +28,7 @@ final class ViewController: UIViewController, KVKToastDisplayable {
         sender.isSelected.toggle()
         
         if !sender.isSelected {
-            hideToast()
+            view.hideToast()
             sender.setTitle("Display", for: .normal)
         } else {
             var testImage: UIImage?
@@ -36,23 +36,21 @@ final class ViewController: UIViewController, KVKToastDisplayable {
                 testImage = UIImage(systemName: "trash")
             }
             
-            displayToast("Title!",
-                         position: .top,
-                         duration: 5)
-            displayToast("Title!",
-                         message: "Description!",
-                         position: .center,
-                         duration: 10)
-            displayToast("Title!",
-                         message: "Description!\nAnd image!",
-                         image: testImage,
-                         position: .bottom,
-                         duration: 20)
+            view.displayToast("Title", position: .top, duration: 5)
+            view.displayToast("Title!",
+                              message: "Description!",
+                              position: .center,
+                              duration: 10)
+            view.displayToast("Title!",
+                              message: "Description!\nAnd image!",
+                              image: testImage,
+                              position: .bottom,
+                              duration: 20)
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-                self?.displayToast("Toast with delay!",
-                                   position: .top,
-                                   duration: 3)
+                self?.view.displayToast("Toast with delay!",
+                                        position: .top,
+                                        duration: 3)
             }
             
             sender.setTitle("Hide", for: .normal)

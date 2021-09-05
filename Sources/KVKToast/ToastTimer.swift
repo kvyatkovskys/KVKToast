@@ -16,7 +16,6 @@ private enum AssociatedKeys {
 /// Any object can start and stop delayed action for key
 protocol ToastTimer: ToastAction {}
 
-@available(iOS 10.0, *)
 extension ToastTimer {
     
     private var timers: [Int: Timer] {
