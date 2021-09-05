@@ -48,9 +48,7 @@ final class ViewController: UIViewController {
                               duration: 20)
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-                self?.view.displayToast("Toast with delay!",
-                                        position: .top,
-                                        duration: 3)
+                self?.view.displayToast("Toast with delay!", position: .top, duration: 3)
             }
             
             sender.setTitle("Hide", for: .normal)

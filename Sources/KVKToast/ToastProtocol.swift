@@ -11,14 +11,14 @@ import UIKit
 
 public protocol KVKToastDisplayable {}
 
-public extension KVKToastDisplayable where Self: UIView {
-        
+extension UIView: KVKToastDisplayable {
+    
     func displayToast(_ title: String,
-                             message: String? = nil,
-                             image: UIImage? = nil,
-                             position: ToastPosition = .top,
-                             type: ToastType = .info,
-                             duration: Double = 3.0)
+                      message: String? = nil,
+                      image: UIImage? = nil,
+                      position: ToastPosition = .top,
+                      type: ToastType = .info,
+                      duration: Double = 3.0)
     {
         showToast(title: title, message: message, image: image, position: position, duration: duration)
         type.notificationFeedback()
