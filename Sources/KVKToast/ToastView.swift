@@ -15,7 +15,6 @@ final class ToastView: UIView {
         let title: String
         let message: String?
         let image: UIImage?
-        let style: ToastStyle
     }
     
     private let parameters: Parameters
@@ -33,8 +32,6 @@ final class ToastView: UIView {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
-        label.font = .appFont(size: 17, weight: .semibold)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.8
         return label
@@ -42,8 +39,6 @@ final class ToastView: UIView {
     
     private let messageLabel: UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
-        label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.8
         return label
@@ -57,37 +52,45 @@ final class ToastView: UIView {
         
         if let img = parameters.image {
             imageView.image = img
-            imageView.frame = CGRect(x: 10, y: (frame.height * 0.5) - 12.5, width: 25, height: 25)
             addSubview(imageView)
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            
+            let leftConstraint = imageView.leftAnchor.constraint(equalTo: leftAnchor, constant: 5)
+            let centerYConstraint = imageView.centerYAnchor.constraint(equalTo: centerYAnchor)
+            let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: actualStyle.imageSize.width)
+            let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: actualStyle.imageSize.height)
+            NSLayoutConstraint.activate([leftConstraint, centerYConstraint, widthConstraint, heightConstraint])
         }
         
-        let titleX: CGFloat
-        let titleWidth: CGFloat
+        addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let leftConstraint: NSLayoutConstraint
+        let rightOffset: CGFloat
         if parameters.image != nil {
-            titleX = imageView.frame.origin.x + imageView.frame.width + 10
-            titleWidth = frame.width - titleX - 20 - imageView.frame.width
+            rightOffset = actualStyle.imageSize.width + 15
+            leftConstraint = stackView.leftAnchor.constraint(equalTo: imageView.rightAnchor, constant: 5)
         } else {
-            titleX = 10
-            titleWidth = frame.width - 20
-        }
-        let titleHeight: CGFloat
-        if parameters.message != nil {
-            titleHeight = 25
-        } else {
-            titleHeight = frame.height
+            rightOffset = 5
+            leftConstraint = stackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 5)
         }
         
+        let bottomConstraint = stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5)
+        let rightConstraint = stackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -rightOffset)
+        let topConstraint = stackView.topAnchor.constraint(equalTo: topAnchor, constant: 5)
+        NSLayoutConstraint.activate([leftConstraint, rightConstraint, topConstraint, bottomConstraint])
+        
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.text = parameters.title
-        titleLabel.frame = CGRect(x: titleX, y: 5, width: titleWidth, height: titleHeight)
-        addSubview(titleLabel)
+        stackView.addArrangedSubview(titleLabel)
         
         if let message = parameters.message {
+            let heightConstraint = titleLabel.heightAnchor.constraint(equalToConstant: 25)
+            NSLayoutConstraint.activate([heightConstraint])
+            
+            messageLabel.translatesAutoresizingMaskIntoConstraints = false
             messageLabel.text = message
-            messageLabel.frame = CGRect(x: titleLabel.frame.origin.x,
-                                        y: titleLabel.frame.height + titleLabel.frame.origin.y,
-                                        width: titleLabel.frame.width,
-                                        height: frame.height - titleLabel.frame.height - titleLabel.frame.origin.y)
-            addSubview(messageLabel)
+            stackView.addArrangedSubview(messageLabel)
         }
     }
     
@@ -100,29 +103,22 @@ final class ToastView: UIView {
     }
     
     private func updateStyle() {
-        let style: UIBlurEffect.Style
-        let textColor: UIColor
-        let bgColor: UIColor
+        titleLabel.textAlignment = actualStyle.titleAlignment
+        titleLabel.numberOfLines = actualStyle.titleNumberOfLines
+        titleLabel.font = actualStyle.titleFont
+        titleLabel.textColor = actualStyle.titleColor
         
-        switch UIScreen.isDarkMode {
-        case true:
-            style = .dark
-            textColor = .lightText
-            bgColor = .black
-        case false:
-            style = .light
-            textColor = .black
-            if #available(iOS 13.0, *) {
-                bgColor = .systemGray6
-            } else {
-                bgColor = .lightGray
-            }
-        }
+        messageLabel.textColor = actualStyle.messageColor
+        messageLabel.textAlignment = actualStyle.messageAlignment
+        messageLabel.font = actualStyle.messageFont
+        messageLabel.numberOfLines = actualStyle.messageNumberOfLines
         
-        titleLabel.textColor = textColor
-        messageLabel.textColor = textColor
-        backgroundColor = bgColor
-        setBlur(style: style)
+        backgroundColor = actualStyle.backgroundColor
+        setBlur(style: actualStyle.blur)
+    }
+    
+    private var actualStyle: ToastStyle {
+        ToastStyle.shared.actualStyle
     }
     
 }

@@ -11,20 +11,48 @@ import UIKit
 
 public struct ToastStyle {
     
-    public init() {}
+    public static let shared = ToastStyle()
     
-    public var backgroundColor: UIColor = UIColor.black.withAlphaComponent(0.8)
-    public var titleColor: UIColor = .white
-    public var messageColor: UIColor = .white
-    public var cornerRadius: CGFloat = 10
-    public var titleFont: UIFont = .appFont(size: 17, weight: .bold)
+    private init() {}
+    
+    public var backgroundColor: UIColor = {
+        if #available(iOS 13.0, *) {
+            return .systemGray6
+        } else {
+            return .lightGray
+        }
+    }()
+    public var titleColor: UIColor = .darkGray
+    public var messageColor: UIColor = .darkGray
+    public var cornerRadius: CGFloat = 25
+    public var titleFont: UIFont = .appFont(size: 17, weight: .semibold)
     public var messageFont: UIFont = .appFont(size: 17)
     public var titleAlignment: NSTextAlignment = .center
     public var messageAlignment: NSTextAlignment = .center
     public var titleNumberOfLines = 0
     public var messageNumberOfLines = 0
-    public var imageSize = CGSize(width: 30, height: 30)
-    public var minHeight: CGFloat = 70
+    public var imageSize = CGSize(width: 25, height: 25)
+    public var minHeight: CGFloat = 50
+    public var followForSystemTheme: Bool = true
+    public var blur: UIBlurEffect.Style = .light
+    
+}
+
+extension ToastStyle {
+    
+    var actualStyle: ToastStyle {
+        guard followForSystemTheme else { return self }
+        
+        var updatedStyle = self
+        if #available(iOS 13, *) {
+            updatedStyle.titleColor = UIColor.useColorForStyle(dark: .lightText, white: updatedStyle.titleColor)
+            updatedStyle.messageColor = UIColor.useColorForStyle(dark: .lightText, white: updatedStyle.messageColor)
+            updatedStyle.backgroundColor = UIColor.useColorForStyle(dark: .black, white: updatedStyle.backgroundColor)
+        }
+        updatedStyle.blur = UIScreen.isDarkMode ? .dark : .light
+        
+        return updatedStyle
+    }
 }
 
 #endif

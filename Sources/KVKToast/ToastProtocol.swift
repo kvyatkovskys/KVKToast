@@ -11,47 +11,59 @@ import UIKit
 
 public protocol KVKToastDisplayable: AnyObject {}
 
+@available(iOS 10.0, *)
 extension KVKToastDisplayable where Self: UIViewController {
         
-    public func displayToast(_ title: String, message: String? = nil, image: UIImage? = nil, position: ToastPosition = .top, type: ToastType = .info, duration: Double = 3.0, style: ToastStyle = ToastStyle()) {
-        view.showToast(title: title, message: message, image: image, position: position, duration: duration, style: style)
+    public func displayToast(_ title: String,
+                             message: String? = nil,
+                             image: UIImage? = nil,
+                             position: ToastPosition = .top,
+                             type: ToastType = .info,
+                             duration: Double = 3.0)
+    {
+        view.showToast(title: title, message: message, image: image, position: position, duration: duration)
         type.notificationFeedback()
     }
     
-    public func removeAllToasts() {
+    public func hideAllToasts() {
         view.removeAllToasts()
+    }
+    
+    public func hideToast() {
+        view.removeToast()
     }
     
 }
 
 // MARK: Privates
 
+@available(iOS 10.0, *)
 extension UIView: ToastTimer, ToastStore {
     
     func removeAllToasts() {
         stopAllTimers()
     }
     
-    func showToast(title: String, message: String?, image: UIImage?, position: ToastPosition, duration: Double, style: ToastStyle) {
-        var heightToast: CGFloat = 50
+    func removeToast() {
+        stopTimer(lastActiveToastKey)
+    }
+    
+    func showToast(title: String, message: String?, image: UIImage?, position: ToastPosition, duration: Double) {
+        let actualStyle = ToastStyle.shared.actualStyle
+        var heightToast = actualStyle.minHeight
         let defaultTopOffset = UIApplication.shared.statusBarHeight + 5
-        let defaultBottomOffset: CGFloat = 55
-        
-        var testImage = image
-        if #available(iOS 13.0, *) {
-            testImage = UIImage(systemName: "trash")
-        }
+        let defaultBottomOffset = actualStyle.minHeight + 5
         
         var widthToast: CGFloat = 300
         if let text = message {
-            let messageWidth = text.width(withHeight: heightToast, font: .appFont(size: 17)) + 40
+            let messageWidth = text.width(withHeight: heightToast, font: actualStyle.messageFont) + 40
             if messageWidth > UIScreen.main.bounds.width {
                 widthToast = UIScreen.main.bounds.width - 20
             } else if messageWidth > widthToast {
                 widthToast = messageWidth
             }
             
-            let messageHeight = text.height(withWidth: widthToast, font: .appFont(size: 17)) + 30
+            let messageHeight = text.height(withWidth: widthToast, font: actualStyle.titleFont) + 30
             if messageHeight > heightToast {
                 heightToast = messageHeight + 10
             }
@@ -80,12 +92,12 @@ extension UIView: ToastTimer, ToastStore {
             }
         }
         
-        let toast = ToastView(parameters: .init(title: title, message: message, image: testImage, style: style),
+        let toast = ToastView(parameters: .init(title: title, message: message, image: image),
                               frame: CGRect(x: (frame.width * 0.5) - (widthToast * 0.5),
                                             y: topY,
                                             width: widthToast,
                                             height: heightToast))
-        toast.layer.cornerRadius = 25
+        toast.layer.cornerRadius = actualStyle.cornerRadius
         toast.layer.masksToBounds = true
         toast.transform = CGAffineTransform(translationX: 0, y: offset)
         

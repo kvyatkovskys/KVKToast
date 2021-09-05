@@ -13,10 +13,10 @@ final class ToastStackView: UIStackView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        distribution = .fillProportionally
+        distribution = .equalSpacing
         axis = .vertical
         alignment = .center
-        spacing = 15
+        spacing = 5
     }
     
     required init(coder: NSCoder) {

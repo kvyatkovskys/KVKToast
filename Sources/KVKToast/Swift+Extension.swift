@@ -57,6 +57,17 @@ extension String {
 
 }
 
+extension UIColor {
+    
+    @available(iOS 13, *)
+    static func useColorForStyle(dark: UIColor, white: UIColor) -> UIColor {
+        return UIColor { (traitCollection: UITraitCollection) -> UIColor in
+            return traitCollection.userInterfaceStyle == .dark ? dark : white
+        }
+    }
+    
+}
+
 extension UIScreen {
     
     static var isDarkMode: Bool {

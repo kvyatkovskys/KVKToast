@@ -28,21 +28,33 @@ final class ViewController: UIViewController, KVKToastDisplayable {
         sender.isSelected.toggle()
         
         if !sender.isSelected {
-            removeAllToasts()
+            hideToast()
             sender.setTitle("Display", for: .normal)
         } else {
-            displayToast("Test Toast!",
-                         message: "Success!",
+            var testImage: UIImage?
+            if #available(iOS 13.0, *) {
+                testImage = UIImage(systemName: "trash")
+            }
+            
+            displayToast("Title!",
                          position: .top,
                          duration: 5)
-            displayToast("Test Toast!",
-                         message: "Dispose of any resources!",
+            displayToast("Title!",
+                         message: "Description!",
                          position: .center,
                          duration: 10)
-            displayToast("Test Toast!",
-                         message: "Dispose of any resources!\nTest image display text",
+            displayToast("Title!",
+                         message: "Description!\nAnd image!",
+                         image: testImage,
                          position: .bottom,
                          duration: 20)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                self?.displayToast("Toast with delay!",
+                                   position: .top,
+                                   duration: 3)
+            }
+            
             sender.setTitle("Hide", for: .normal)
         }
     }
