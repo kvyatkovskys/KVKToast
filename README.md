@@ -1,3 +1,5 @@
+<img src="Screenshots/iphone.png" width="280">
+
 [![CI Status](https://img.shields.io/travis/kvyatkovskys/KVKToast.svg?style=flat)](https://travis-ci.org/kvyatkovskys/KVKToast)
 [![Version](https://img.shields.io/cocoapods/v/KVKToast.svg?style=flat)](https://cocoapods.org/pods/KVKToast)
 [![Carthage](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=fla)](https://github.com/Carthage/Carthage/)
