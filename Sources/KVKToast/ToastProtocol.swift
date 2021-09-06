@@ -112,7 +112,7 @@ extension UIView: ToastTimer, ToastStore {
             toast.alpha = 0
         }
         
-        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: .curveEaseInOut) {
+        UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: .curveEaseInOut) {
             if position == .center {
                 toast.alpha = 1
             } else {
@@ -138,7 +138,7 @@ extension UIView: ToastTimer, ToastStore {
     }
     
     fileprivate func hideToast(toast: UIView, position: ToastPosition, offset: CGFloat, completion: @escaping Action) {
-        UIView.animate(withDuration: 1) {
+        UIView.animate(withDuration: 0.3) {
             if position == .center {
                 toast.alpha = 0
             } else {
