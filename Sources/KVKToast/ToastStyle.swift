@@ -35,7 +35,7 @@ public struct ToastStyle {
     public var minHeight: CGFloat = 50
     public var minWidth: CGFloat = 250
     public var followForSystemTheme: Bool = true
-    public var blur: UIBlurEffect.Style = .light
+    public var blur: UIBlurEffect.Style? = .light
     private var isEnableHideWithGesture: Bool = true
     
 }
