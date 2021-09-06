@@ -7,7 +7,7 @@
 
 # KVKToast
 
-<img src="Screenshots/phone.png" width="280">
+<img src="Screenshots/phone_light.png" width="280"> <img src="Screenshots/phone_dark.png" width="280">
 
 ## Requirements
 
