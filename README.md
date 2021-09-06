@@ -1,3 +1,10 @@
+[![CI Status](https://img.shields.io/travis/kvyatkovskys/KVKToast.svg?style=flat)](https://travis-ci.org/kvyatkovskys/KVKToast)
+[![Version](https://img.shields.io/cocoapods/v/KVKToast.svg?style=flat)](https://cocoapods.org/pods/KVKToast)
+[![Carthage](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=fla)](https://github.com/Carthage/Carthage/)
+[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-orange.svg)](https://swiftpackageindex.com/kvyatkovskys/KVKToast)
+[![Platform](https://img.shields.io/cocoapods/p/KVKToast.svg?style=flat)](https://cocoapods.org/pods/KVKToast)
+[![License](https://img.shields.io/cocoapods/l/KVKToast.svg?style=flat)](https://cocoapods.org/pods/KVKToast)
+
 # KVKToast
 
 ## Requirements
@@ -35,5 +42,36 @@ github "kvyatkovskys/KVKToast"
 
 ## Usage for UIKit
 
+To display a toast
 
-... work in progress
+```swift
+view.displayToast("Test")
+```
+
+To display a toast with parameters
+
+```swift
+view.displayToast("Test", message: "Description", image: image, position: .top, type: .info, duration: 5)
+```
+
+To hide the latest toast immediately
+
+```swift
+view.hideToast()
+```
+
+To hide all toasts
+```swift
+view.hideAllToasts()
+```
+
+## Style
+
+
+## Author
+
+[Sergei Kviatkovskii](https://github.com/kvyatkovskys)
+
+## License
+
+KVKToast is available under the [MIT license](https://github.com/kvyatkovskys/KVKToast/blob/master/LICENSE.md)
