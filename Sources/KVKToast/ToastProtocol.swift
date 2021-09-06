@@ -104,7 +104,7 @@ extension UIView: ToastTimer, ToastStore {
                   duration: duration,
                   position: position,
                   offset: offset,
-                  isEnabledGesture: actualStyle.isEnableHideWithGesture)
+                  isEnabledGesture: false)
     }
     
     fileprivate func showToast(_ toast: UIView, duration: Double, position: ToastPosition, offset: CGFloat, isEnabledGesture: Bool) {
