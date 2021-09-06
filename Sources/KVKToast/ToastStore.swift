@@ -10,7 +10,7 @@
 import UIKit
 
 private enum AssociatedKeys {
-    static var toast: String = "com.toast.active-toasts"
+    static var toast: String = "com.toast.store-toasts"
 }
 
 /// Any object can start and stop delayed action for key
@@ -29,15 +29,13 @@ extension ToastStore {
     
     @discardableResult
     func removeToast(_ key: Int) -> UIView? {
-        let toast = toasts.removeValue(forKey: key)
-        print(toasts, "🚨🚨")
-        return toast
+        toasts.removeValue(forKey: key)
     }
     
     func saveToast(_ key: Int, toast: UIView) {
         toasts[key] = toast
-        print(toasts, "🚨")
     }
+    
 }
 
 #endif
