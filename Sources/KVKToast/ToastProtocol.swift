@@ -38,15 +38,15 @@ extension UIView: KVKToastDisplayable {
 
 extension UIView: ToastTimer, ToastStore {
     
-    func removeAllToasts() {
+    fileprivate func removeAllToasts() {
         stopAllTimers()
     }
     
-    func removeToast() {
+    fileprivate func removeToast() {
         stopTimer(lastActiveToastKey)
     }
     
-    func showToast(title: String, message: String?, image: UIImage?, position: ToastPosition, duration: Double) {
+    fileprivate func showToast(title: String, message: String?, image: UIImage?, position: ToastPosition, duration: Double) {
         let actualStyle = ToastStyle.shared.actualStyle
         var heightToast = actualStyle.minHeight
         let defaultTopOffset = UIApplication.shared.statusBarHeight + 5
@@ -54,7 +54,7 @@ extension UIView: ToastTimer, ToastStore {
         
         var widthToast: CGFloat = 300
         if let text = message {
-            let messageWidth = text.width(withHeight: heightToast, font: actualStyle.messageFont) + 40
+            let messageWidth = text.width(withHeight: heightToast, font: actualStyle.messageFont) + 30
             if messageWidth > UIScreen.main.bounds.width {
                 widthToast = UIScreen.main.bounds.width - 20
             } else if messageWidth > widthToast {
@@ -79,7 +79,7 @@ extension UIView: ToastTimer, ToastStore {
             offset = -(heightToast + topY + 10)
         case .center:
             offset = 0
-            topY = frame.height * 0.5 - 25
+            topY = (frame.height * 0.5) - (heightToast * 0.5)
         case .bottom:
             if #available(iOS 11.0, *) {
                 offset = safeAreaInsets.bottom + heightToast + 10
@@ -103,7 +103,7 @@ extension UIView: ToastTimer, ToastStore {
         showToast(toast, duration: duration, position: position, offset: offset)
     }
     
-    func showToast(_ toast: UIView, duration: Double, position: ToastPosition, offset: CGFloat) {
+    fileprivate func showToast(_ toast: UIView, duration: Double, position: ToastPosition, offset: CGFloat) {
         if position == .center {
             toast.alpha = 0
         }
@@ -126,7 +126,7 @@ extension UIView: ToastTimer, ToastStore {
         }
     }
     
-    func hideToast(toast: UIView, position: ToastPosition, offset: CGFloat, completion: @escaping Action) {
+    fileprivate func hideToast(toast: UIView, position: ToastPosition, offset: CGFloat, completion: @escaping Action) {
         UIView.animate(withDuration: 1) {
             if position == .center {
                 toast.alpha = 0

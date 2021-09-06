@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import KVKToast
 
 final class ViewController: UIViewController {
         
@@ -28,7 +27,7 @@ final class ViewController: UIViewController {
         sender.isSelected.toggle()
         
         if !sender.isSelected {
-            view.hideToast()
+            view.hideAllToasts()
             sender.setTitle("Display", for: .normal)
         } else {
             var testImage: UIImage?
@@ -46,10 +45,6 @@ final class ViewController: UIViewController {
                               image: testImage,
                               position: .bottom,
                               duration: 20)
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-                self?.view.displayToast("Toast with delay!", position: .top, duration: 3)
-            }
             
             sender.setTitle("Hide", for: .normal)
         }
