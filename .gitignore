@@ -1,7 +1,41 @@
+# OS X
 .DS_Store
-/.build
+
+# Xcode
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.xcuserstate
+/.idea/*
+*.mobileprovision
+report.xml
+fastlane/test_output/
+fastlane/xcov_report/
+.scannerwork
+Example/build/*
+
+# CocoaPods
+#Pods
+
+# Swift Package Manager
 /Packages
-/*.xcodeproj
-xcuserdata/
-DerivedData/
+*.xcodeproj
+.build/
 .swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+
+# Carthage
+Carthage/Build
+
+## Obj-C/Swift specific
+*.hmap
+*.ipa
