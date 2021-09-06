@@ -52,7 +52,7 @@ extension UIView: ToastTimer, ToastStore {
         let defaultTopOffset = UIApplication.shared.statusBarHeight + 5
         let defaultBottomOffset = actualStyle.minHeight + 5
         
-        var widthToast: CGFloat = 300
+        var widthToast: CGFloat = actualStyle.minWidth
         if let text = message {
             let messageWidth = text.width(withHeight: heightToast, font: actualStyle.messageFont) + 30
             if messageWidth > UIScreen.main.bounds.width {
@@ -100,10 +100,14 @@ extension UIView: ToastTimer, ToastStore {
         toast.transform = CGAffineTransform(translationX: 0, y: offset)
         
         addSubview(toast)
-        showToast(toast, duration: duration, position: position, offset: offset)
+        showToast(toast,
+                  duration: duration,
+                  position: position,
+                  offset: offset,
+                  isEnabledGesture: actualStyle.isEnableHideWithGesture)
     }
     
-    fileprivate func showToast(_ toast: UIView, duration: Double, position: ToastPosition, offset: CGFloat) {
+    fileprivate func showToast(_ toast: UIView, duration: Double, position: ToastPosition, offset: CGFloat, isEnabledGesture: Bool) {
         if position == .center {
             toast.alpha = 0
         }
@@ -116,6 +120,13 @@ extension UIView: ToastTimer, ToastStore {
             }
         } completion: { (_) in
             let key = self.lastActiveToastKey + 1
+            
+            if isEnabledGesture && position != .center {
+                let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.handleGesture))
+                toast.tag = key
+                toast.addGestureRecognizer(panGesture)
+            }
+            
             self.saveToast(key, toast: toast)
             self.startTimer(key, interval: duration) { [weak self] in
                 self?.hideToast(toast: toast, position: position, offset: offset) { [weak self] in
@@ -136,6 +147,10 @@ extension UIView: ToastTimer, ToastStore {
         } completion: { _ in
             completion()
         }
+    }
+    
+    @objc fileprivate func handleGesture(gesture: UIPanGestureRecognizer) {
+        
     }
     
 }

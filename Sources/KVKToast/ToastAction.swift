@@ -10,7 +10,7 @@
 import Foundation
 
 private enum AssociatedKeys {
-    static var actions: UInt8 = 0
+    static var actions: String = "com.toast.action-toasts"
 }
 
 /// Any object can start and stop delayed action for key

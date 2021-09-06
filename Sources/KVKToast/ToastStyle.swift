@@ -33,8 +33,10 @@ public struct ToastStyle {
     public var messageNumberOfLines = 0
     public var imageSize = CGSize(width: 25, height: 25)
     public var minHeight: CGFloat = 50
+    public var minWidth: CGFloat = 250
     public var followForSystemTheme: Bool = true
     public var blur: UIBlurEffect.Style = .light
+    var isEnableHideWithGesture: Bool = true
     
 }
 
