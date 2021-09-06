@@ -114,7 +114,10 @@ final class ToastView: UIView {
         messageLabel.numberOfLines = actualStyle.messageNumberOfLines
         
         backgroundColor = actualStyle.backgroundColor
-        setBlur(style: actualStyle.blur)
+        
+        if let blur = actualStyle.blur {
+            setBlur(style: blur)
+        }
     }
     
     private var actualStyle: ToastStyle {
