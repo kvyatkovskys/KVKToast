@@ -53,7 +53,12 @@ view.displayToast("Test")
 To display a toast with parameters
 
 ```swift
-view.displayToast("Test", message: "Description", image: image, position: .top, type: .info, duration: 5)
+view.displayToast("Test", 
+                  message: "Description", 
+                  image: image, 
+                  position: .top,
+                  type: .info, 
+                  duration: 5)
 ```
 
 To hide the latest toast immediately
