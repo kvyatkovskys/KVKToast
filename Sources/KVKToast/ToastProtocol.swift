@@ -31,7 +31,7 @@ extension UIView: KVKToastDisplayable {
     }
     
     private static var defaultType: ToastType {
-        .info
+        .info(nil)
     }
     
     /**
@@ -56,7 +56,7 @@ extension UIView: KVKToastDisplayable {
                             position: position,
                             duration: duration,
                             customStyle: customStyle)
-        ToastType.info.notificationFeedback()
+        ToastType.info(nil).notificationFeedback()
     }
     
     ///
