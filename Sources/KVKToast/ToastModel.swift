@@ -30,4 +30,23 @@ public enum ToastType: Int {
     }
 }
 
+extension ToastType {
+    
+    var style: ToastStyle {
+        var style = ToastStyle.shared.actualStyle
+        
+        switch self {
+        case .error, .warning:
+            style.backgroundColor = .systemRed
+            style.titleColor = .white
+            style.messageColor = .white
+        default:
+            break
+        }
+        
+        return style
+    }
+    
+}
+
 #endif

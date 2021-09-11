@@ -35,7 +35,7 @@ final class ViewController: UIViewController {
                 testImage = UIImage(systemName: "trash")
             }
             
-            view.displayToast("Title", position: .top, duration: 5)
+            view.displayToastWithType("Title", position: .top, type: .error, duration: 5)
             view.displayToast("Title!",
                               message: "Description!",
                               position: .center,

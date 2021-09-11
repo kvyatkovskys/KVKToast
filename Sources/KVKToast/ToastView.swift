@@ -15,6 +15,7 @@ final class ToastView: UIView {
         let title: String
         let message: String?
         let image: UIImage?
+        var style: ToastStyle?
     }
     
     private let parameters: Parameters
@@ -121,7 +122,11 @@ final class ToastView: UIView {
     }
     
     private var actualStyle: ToastStyle {
-        ToastStyle.shared.actualStyle
+        guard let style = parameters.style else {
+            return ToastStyle.shared.actualStyle
+        }
+        
+        return style
     }
     
 }
