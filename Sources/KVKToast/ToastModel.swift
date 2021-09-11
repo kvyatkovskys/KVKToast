@@ -13,8 +13,8 @@ public enum ToastPosition: Int {
     case top, center, bottom
 }
 
-public enum ToastType: Int {
-    case info, success, warning, error
+public enum ToastType {
+    case info(ToastStyle?), success(ToastStyle?), warning(ToastStyle?), error(ToastStyle?)
     
     func notificationFeedback() {
         switch self {
@@ -36,10 +36,14 @@ extension ToastType {
         var style = ToastStyle.shared.actualStyle
         
         switch self {
-        case .error, .warning:
-            style.backgroundColor = .systemRed
-            style.titleColor = .white
-            style.messageColor = .white
+        case .error(let customStyle), .warning(let customStyle):
+            if let item = customStyle {
+                style = item
+            } else {
+                style.backgroundColor = .systemRed
+                style.titleColor = .white
+                style.messageColor = .white
+            }
         default:
             break
         }
