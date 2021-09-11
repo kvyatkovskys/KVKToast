@@ -13,21 +13,75 @@ public protocol KVKToastDisplayable {}
 
 extension UIView: KVKToastDisplayable {
     
+    // default parameters
+    private static var defaultMessage: String? {
+        nil
+    }
+    
+    private static var defaultImage: UIImage? {
+        nil
+    }
+    
+    private static var defaultPosition: ToastPosition {
+        .top
+    }
+    
+    private static var defaultDuration: TimeInterval {
+        3
+    }
+    
+    private static var defaultType: ToastType {
+        .info
+    }
+    
+    /**
+     Display a toast on view with parameters
+        - parameter title: Title of toast.
+        - parameter message: Additional description of toast (optional).
+        - parameter image: Toast icon is displayed on left side of view (optional).
+        - parameter position: Position of toast on parent view (optional).
+        - parameter duration: Duration of toast (default = 3 seconds).
+        - parameter customStyle: Custom style for a specific toast (optional).
+    */
     func displayToast(_ title: String,
-                      message: String? = nil,
-                      image: UIImage? = nil,
-                      position: ToastPosition = .top,
-                      type: ToastType = .info,
-                      duration: Double = 3.0)
+                      message: String? = defaultMessage,
+                      image: UIImage? = defaultImage,
+                      position: ToastPosition = defaultPosition,
+                      duration: TimeInterval = defaultDuration,
+                      customStyle: ToastStyle? = nil)
     {
-        showToast(title: title, message: message, image: image, position: position, duration: duration)
+        prepareAndShowToast(title: title,
+                            message: message,
+                            image: image,
+                            position: position,
+                            duration: duration,
+                            customStyle: customStyle)
+        ToastType.info.notificationFeedback()
+    }
+    
+    ///
+    func displayToastWithType(_ title: String,
+                              message: String? = defaultMessage,
+                              image: UIImage? = defaultImage,
+                              position: ToastPosition = defaultPosition,
+                              type: ToastType = defaultType,
+                              duration: Double = defaultDuration)
+    {
+        prepareAndShowToast(title: title,
+                            message: message,
+                            image: image,
+                            position: position,
+                            duration: duration,
+                            customStyle: type.style)
         type.notificationFeedback()
     }
     
+    ///
     func hideAllToasts() {
         removeAllToasts()
     }
     
+    ///
     func hideToast() {
         removeToast()
     }
@@ -46,8 +100,14 @@ extension UIView: ToastTimer, ToastStore {
         stopTimer(lastActiveToastKey)
     }
     
-    fileprivate func showToast(title: String, message: String?, image: UIImage?, position: ToastPosition, duration: Double) {
-        let actualStyle = ToastStyle.shared.actualStyle
+    fileprivate func prepareAndShowToast(title: String, message: String?, image: UIImage?, position: ToastPosition, duration: Double, customStyle: ToastStyle?) {
+        let actualStyle: ToastStyle
+        if let style = customStyle {
+            actualStyle = style
+        } else {
+            actualStyle = ToastStyle.shared.actualStyle
+        }
+        
         var heightToast = actualStyle.minHeight
         let defaultTopOffset = UIApplication.shared.statusBarHeight + 5
         let defaultBottomOffset = actualStyle.minHeight + 5
@@ -90,7 +150,7 @@ extension UIView: ToastTimer, ToastStore {
             }
         }
         
-        let toast = ToastView(parameters: .init(title: title, message: message, image: image),
+        let toast = ToastView(parameters: .init(title: title, message: message, image: image, style: actualStyle),
                               frame: CGRect(x: (frame.width * 0.5) - (widthToast * 0.5),
                                             y: topY,
                                             width: widthToast,
@@ -107,7 +167,7 @@ extension UIView: ToastTimer, ToastStore {
                   isEnabledGesture: false)
     }
     
-    fileprivate func showToast(_ toast: UIView, duration: Double, position: ToastPosition, offset: CGFloat, isEnabledGesture: Bool) {
+    fileprivate func showToast(_ toast: UIView, duration: TimeInterval, position: ToastPosition, offset: CGFloat, isEnabledGesture: Bool) {
         if position == .center {
             toast.alpha = 0
         }
