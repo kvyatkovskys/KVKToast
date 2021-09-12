@@ -97,10 +97,16 @@ extension UIView: ToastTimer, ToastStore {
     }
     
     fileprivate func removeToast() {
-        stopTimer(lastActiveToastKey)
+        stopTimer(lastActiveToastKey, haveToCompleteAction: true)
     }
     
-    fileprivate func prepareAndShowToast(title: String, message: String?, image: UIImage?, position: ToastPosition, duration: Double, customStyle: ToastStyle?) {
+    fileprivate func prepareAndShowToast(title: String,
+                                         message: String?,
+                                         image: UIImage?,
+                                         position: ToastPosition,
+                                         duration: Double,
+                                         customStyle: ToastStyle?)
+    {
         let actualStyle: ToastStyle
         if let style = customStyle {
             actualStyle = style
@@ -150,7 +156,12 @@ extension UIView: ToastTimer, ToastStore {
             }
         }
         
-        let toast = ToastView(parameters: .init(title: title, message: message, image: image, style: actualStyle),
+        let toastParams = ToastView.Parameters(title: title,
+                                               message: message,
+                                               image: image,
+                                               style: actualStyle,
+                                               position: position)
+        let toast = ToastView(parameters: toastParams,
                               frame: CGRect(x: (frame.width * 0.5) - (widthToast * 0.5),
                                             y: topY,
                                             width: widthToast,
@@ -164,10 +175,15 @@ extension UIView: ToastTimer, ToastStore {
                   duration: duration,
                   position: position,
                   offset: offset,
-                  isEnabledGesture: false)
+                  isEnabledGesture: actualStyle.isEnableHideWithGesture)
     }
     
-    fileprivate func showToast(_ toast: UIView, duration: TimeInterval, position: ToastPosition, offset: CGFloat, isEnabledGesture: Bool) {
+    fileprivate func showToast(_ toast: ToastView,
+                               duration: TimeInterval,
+                               position: ToastPosition,
+                               offset: CGFloat,
+                               isEnabledGesture: Bool)
+    {
         if position == .center {
             toast.alpha = 0
         }
@@ -197,7 +213,7 @@ extension UIView: ToastTimer, ToastStore {
         }
     }
     
-    fileprivate func hideToast(toast: UIView, position: ToastPosition, offset: CGFloat, completion: @escaping Action) {
+    fileprivate func hideToast(toast: ToastView, position: ToastPosition, offset: CGFloat, completion: @escaping Action) {
         UIView.animate(withDuration: 0.3) {
             if position == .center {
                 toast.alpha = 0
@@ -210,7 +226,50 @@ extension UIView: ToastTimer, ToastStore {
     }
     
     @objc fileprivate func handleGesture(gesture: UIPanGestureRecognizer) {
+        let velocity = gesture.velocity(in: self)
+        let translation = gesture.translation(in: self)
         
+        guard abs(velocity.y) > abs(velocity.x),
+              let key = gesture.view?.tag,
+              let toast = getToast(key) else { return }
+
+        func handleToast(y: CGFloat, forceY: CGFloat, conditional: Bool) {
+            if getTimer(key) != nil && gesture.isChanged {
+                stopTimer(key)
+            }
+                        
+            if (gesture.isChanged || gesture.isEnded) && conditional {
+                gesture.isEnabled = false
+                completeAction(key: key)
+            } else if gesture.isEnded {
+                if let action = getAction(key: key) {
+                    startTimer(key, interval: 3, action: action)
+                }
+                
+                UIView.animate(withDuration: 0.3) {
+                    toast.transform = .identity
+                }
+            } else {
+                toast.transform = CGAffineTransform(translationX: 0, y: y)
+            }
+        }
+        
+        switch toast.position {
+        case .top where translation.y < 0:
+            let value = toast.bounds.height * 0.6
+            
+            handleToast(y: translation.y,
+                        forceY: translation.y - (toast.bounds.height * 2),
+                        conditional: -translation.y > value)
+        case .bottom where translation.y > 0:
+            let value = toast.bounds.height * 0.4
+            
+            handleToast(y: translation.y,
+                        forceY: translation.y + (toast.bounds.height * 2),
+                        conditional: translation.y > value)
+        default:
+            break
+        }
     }
     
 }

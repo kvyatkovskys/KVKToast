@@ -96,4 +96,26 @@ extension UIApplication {
     
 }
 
+extension UIPanGestureRecognizer {
+    
+    var isEnded: Bool {
+        switch state {
+        case .ended, .cancelled, .failed:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    var isChanged: Bool {
+        switch state {
+        case .began, .changed:
+            return true
+        default:
+            return false
+        }
+    }
+    
+}
+
 #endif
