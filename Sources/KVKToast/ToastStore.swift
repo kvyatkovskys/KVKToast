@@ -13,13 +13,12 @@ private enum AssociatedKeys {
     static var toast: String = "com.toast.store-toasts"
 }
 
-/// Any object can start and stop delayed action for key
 protocol ToastStore: AnyObject {}
 
 extension ToastStore {
     
-    private var toasts: [Int: UIView] {
-        get { return objc_getAssociatedObject(self, &AssociatedKeys.toast) as? [Int: UIView] ?? [:] }
+    private var toasts: [Int: ToastView] {
+        get { return objc_getAssociatedObject(self, &AssociatedKeys.toast) as? [Int: ToastView] ?? [:] }
         set { objc_setAssociatedObject(self, &AssociatedKeys.toast, newValue, .OBJC_ASSOCIATION_RETAIN) }
     }
     
@@ -28,12 +27,16 @@ extension ToastStore {
     }
     
     @discardableResult
-    func removeToast(_ key: Int) -> UIView? {
+    func removeToast(_ key: Int) -> ToastView? {
         toasts.removeValue(forKey: key)
     }
     
-    func saveToast(_ key: Int, toast: UIView) {
+    func saveToast(_ key: Int, toast: ToastView) {
         toasts[key] = toast
+    }
+    
+    func getToast(_ key: Int) -> ToastView? {
+        toasts[key]
     }
     
 }

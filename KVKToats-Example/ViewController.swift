@@ -35,7 +35,10 @@ final class ViewController: UIViewController {
                 testImage = UIImage(systemName: "trash")
             }
             
-            view.displayToastWithType("Title", position: .top, type: .error(nil), duration: 5)
+            view.displayToastWithType("Title",
+                                      position: .top,
+                                      type: .error(nil),
+                                      duration: 5)
             view.displayToast("Title!",
                               message: "Description!",
                               position: .center,
@@ -44,7 +47,7 @@ final class ViewController: UIViewController {
                               message: "Description!\nAnd image!",
                               image: testImage,
                               position: .bottom,
-                              duration: 20)
+                              duration: 15)
             
             sender.setTitle("Hide", for: .normal)
         }

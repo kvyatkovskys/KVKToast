@@ -13,7 +13,6 @@ private enum AssociatedKeys {
     static var actions: String = "com.toast.action-toasts"
 }
 
-/// Any object can start and stop delayed action for key
 protocol ToastAction: AnyObject {}
 
 extension ToastAction {
@@ -29,16 +28,26 @@ extension ToastAction {
         actions[key] = action
     }
     
+    func getAction(key: Int) -> Action? {
+        actions[key]
+    }
+    
+    func removeAction(key: Int) {
+        actions[key] = nil
+    }
+    
     func completeAction(key: Int) {
         if let action = actions[key] {
             action()
         }
+        actions[key] = nil
     }
     
     func completeAllActions() {
         actions.forEach {
             $0.value()
         }
+        actions.removeAll()
     }
     
 }

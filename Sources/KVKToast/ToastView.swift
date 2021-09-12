@@ -16,6 +16,7 @@ final class ToastView: UIView {
         let message: String?
         let image: UIImage?
         var style: ToastStyle?
+        var position: ToastPosition = .top
     }
     
     private let parameters: Parameters
@@ -127,6 +128,14 @@ final class ToastView: UIView {
         }
         
         return style
+    }
+    
+}
+
+extension ToastView  {
+    
+    var position: ToastPosition {
+        parameters.position
     }
     
 }
