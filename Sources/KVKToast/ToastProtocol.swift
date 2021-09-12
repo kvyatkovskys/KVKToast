@@ -133,8 +133,8 @@ extension UIView: ToastTimer, ToastStore {
             }
         }
         
-        let offset: CGFloat
-        let topY: CGFloat
+        var offset: CGFloat
+        var topY: CGFloat
         switch position {
         case .top:
             if #available(iOS 11.0, *) {
@@ -152,7 +152,17 @@ extension UIView: ToastTimer, ToastStore {
                 topY = frame.height - safeAreaInsets.bottom - heightToast
             } else {
                 offset = defaultBottomOffset + heightToast + 10
-                topY = defaultBottomOffset
+                topY = frame.height - defaultBottomOffset - heightToast
+            }
+            
+            if let tabBar = (UIApplication.shared.activeWindow?.rootViewController as? UITabBarController)?.tabBar {
+                if #available(iOS 11.0, *) {
+                    offset += 10
+                    topY -= 10
+                } else {
+                    offset += (tabBar.bounds.height + 10)
+                    topY -= (tabBar.bounds.height + 10)
+                }
             }
         }
         
@@ -256,13 +266,13 @@ extension UIView: ToastTimer, ToastStore {
         
         switch toast.position {
         case .top where translation.y < 0:
-            let value = toast.bounds.height * 0.6
+            let value = toast.bounds.height * 0.5
             
             handleToast(y: translation.y,
                         forceY: translation.y - (toast.bounds.height * 2),
                         conditional: -translation.y > value)
         case .bottom where translation.y > 0:
-            let value = toast.bounds.height * 0.4
+            let value = toast.bounds.height * 0.3
             
             handleToast(y: translation.y,
                         forceY: translation.y + (toast.bounds.height * 2),

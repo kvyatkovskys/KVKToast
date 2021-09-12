@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'KVKToast'
-  s.version          = '0.0.3'
+  s.version          = '0.0.4'
   s.summary          = 'Toast for iOS.'
   s.homepage         = 'https://github.com/kvyatkovskys/KVKToast'
   s.license          = { :type => 'MIT', :file => 'LICENSE.md' }
